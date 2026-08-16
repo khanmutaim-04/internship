@@ -24,5 +24,5 @@ return new class extends Migration
     Schema::table('students', function (Blueprint $table) {
         $table->dropColumn('profile_image');
     });
-}
+}   
 };
