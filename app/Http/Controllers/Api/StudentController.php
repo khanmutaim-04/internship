@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
-use App\Models\Course;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -14,13 +14,15 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::with('course')->latest()->get();
+        $students = Student::with('course')
+            ->latest()
+            ->get();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Students fetched successfully',
-            'data' => $students
-        ], 200);
+        return StudentResource::collection($students)
+            ->additional([
+                'success' => true,
+                'message' => 'Students fetched successfully',
+            ]);
     }
 
 
@@ -40,11 +42,13 @@ class StudentController extends Controller
 
         $student->load('course');
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student created successfully',
-            'data' => $student
-        ], 201);
+        return (new StudentResource($student))
+            ->additional([
+                'success' => true,
+                'message' => 'Student created successfully',
+            ])
+            ->response()
+            ->setStatusCode(201);
     }
 
 
@@ -55,11 +59,11 @@ class StudentController extends Controller
     {
         $student->load('course');
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student fetched successfully',
-            'data' => $student
-        ], 200);
+        return (new StudentResource($student))
+            ->additional([
+                'success' => true,
+                'message' => 'Student fetched successfully',
+            ]);
     }
 
 
@@ -79,11 +83,11 @@ class StudentController extends Controller
 
         $student->load('course');
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Student updated successfully',
-            'data' => $student
-        ], 200);
+        return (new StudentResource($student))
+            ->additional([
+                'success' => true,
+                'message' => 'Student updated successfully',
+            ]);
     }
 
 
@@ -96,7 +100,7 @@ class StudentController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Student deleted successfully'
+            'message' => 'Student deleted successfully',
         ], 200);
     }
 }

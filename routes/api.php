@@ -2,14 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\AuthController;
 
-Route::apiResource('students', StudentController::class);
-Route::get('/students', function () {
-    $students = Student::with('course')->get();
+// Public Login API
+Route::post('/login', [AuthController::class, 'login']);
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Students fetched successfully',
-        'data'    => $students
-    ], 200);
+// Protected Student APIs
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/students', [StudentController::class, 'index']);
+
+    Route::post('/students', [StudentController::class, 'store']);
+
+    Route::get('/students/{student}', [StudentController::class, 'show']);
+
+    Route::put('/students/{student}', [StudentController::class, 'update']);
+
+    Route::delete('/students/{student}', [StudentController::class, 'destroy']);
+
 });
