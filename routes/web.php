@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CourseController; // Added CourseController
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\AssistantController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +19,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // AI Assistant Route (Ab yeh sab logged-in users ke liye available hai)
+    Route::post('/ai-assistant/chat', [
+    AssistantController::class,
+    'chat',
+    ])
+    ->middleware(['auth', 'throttle:10,1'])
+    ->name('ai-assistant.chat');
 });
 
 // Admin Only Routes
@@ -33,6 +42,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Courses CRUD
     Route::resource('courses', CourseController::class);
+
 });
 
 require __DIR__.'/auth.php';

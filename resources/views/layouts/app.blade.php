@@ -35,7 +35,7 @@
         </main>
 
     </div>
-
+    @include('partials.ai-chatbot')
 </body>
 
 </html>

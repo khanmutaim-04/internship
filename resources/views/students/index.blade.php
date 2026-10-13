@@ -27,8 +27,7 @@
             {{-- Success Message --}}
             @if(session('success'))
 
-                <div class="mb-6 bg-green-100 border border-green-300
-                            text-green-700 px-4 py-3 rounded-lg">
+                <div class="mb-6 bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg">
 
                     {{ session('success') }}
 
@@ -49,13 +48,11 @@
                         name="search"
                         value="{{ request('search') }}"
                         placeholder="Search student name, email or course..."
-                        class="flex-1 border-gray-300 rounded-lg
-                               focus:border-blue-500 focus:ring-blue-500">
+                        class="flex-1 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-500">
 
                     <button
                         type="submit"
-                        class="px-5 py-2 bg-blue-600 text-white
-                               rounded-lg hover:bg-blue-700">
+                        class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
 
                         Search
 
@@ -64,8 +61,7 @@
                     @if(request('search'))
 
                         <a href="{{ route('students.index') }}"
-                           class="px-5 py-2 bg-gray-500 text-white
-                                  rounded-lg hover:bg-gray-600">
+                           class="px-5 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
 
                             Reset
 
@@ -146,13 +142,13 @@
                                         {{-- Name + Profile Image --}}
                                         <td class="px-6 py-4">
                                             <div class="flex items-center gap-3">
-                                                @if($student->profile_image)
+                                                @if($student->profile_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($student->profile_image))
                                                     <img src="{{ asset('storage/' . $student->profile_image) }}" 
                                                          alt="{{ $student->name }}" 
-                                                         style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; display: block;">
+                                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; display: block;">
                                                 @else
                                                     <div class="rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm" 
-                                                         style="width: 90px; height: 90px;">
+                                                         style="width: 50px; height: 50px;">
                                                         {{ strtoupper(substr($student->name, 0, 1)) }}
                                                     </div>
                                                 @endif
@@ -177,11 +173,7 @@
 
                                             @if($student->course)
 
-                                                <span class="px-3 py-1
-                                                             bg-blue-100
-                                                             text-blue-700
-                                                             rounded-full
-                                                             text-sm">
+                                                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
 
                                                     {{ $student->course->name }}
 
@@ -203,11 +195,7 @@
                                         {{-- Semester --}}
                                         <td class="px-6 py-4">
 
-                                            <span class="px-3 py-1
-                                                         bg-gray-100
-                                                         text-gray-700
-                                                         rounded-full
-                                                         text-sm">
+                                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
 
                                                 Semester {{ $student->semester }}
 
@@ -268,7 +256,7 @@
 
 
                     {{-- Custom Pagination Section --}}
-                    @if($students->hasPages() || $students->total() > 0)
+                    @if($students->total() > 0)
 
                         <div class="p-4 bg-gray-50 border-t">
 
@@ -393,9 +381,7 @@
 
                         <a
                             href="{{ route('students.create') }}"
-                            class="inline-block px-5 py-2
-                                   bg-blue-600 text-white
-                                   rounded-lg hover:bg-blue-700">
+                            class="inline-block px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
 
                             + Add Student
 
